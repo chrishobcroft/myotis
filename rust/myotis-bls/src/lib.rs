@@ -12,6 +12,13 @@
 //! so we `uncompress` them without the per-key subgroup check (same trade-off the Java
 //! path makes); the attacker-controlled signature IS subgroup-checked.
 
+// no_std + alloc unless the JNI shim (which needs std) is built: the verify core
+// is pure, and firmware (deboot-efi) links it via myotis-consensus.
+#![cfg_attr(not(feature = "jni"), no_std)]
+
+extern crate alloc;
+
+use alloc::vec::Vec;
 use blst::min_pk::{PublicKey, Signature};
 use blst::BLST_ERROR;
 
